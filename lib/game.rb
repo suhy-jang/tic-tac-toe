@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+# frozen_string_literal: false
 
 # Game class handles all the game logic
 #   It accepts board_state, player & position as inputs via its move interface.
@@ -13,17 +13,12 @@ class Game
   attr_reader :winner
 
   def self.info
-    puts "-----------------------------------------------------------------".center(80)
-    puts ""
-    puts "Tic Tac Toe is a paper-and-pencil game for two players, X and O, ".center(80)
-    puts ""
-    puts "who take turns marking the spaces in a 3×3 grid.".center(80)
-    puts ""
-    puts "The player who succeeds in placing three of their marks in a ".center(80)
-    puts ""
-    puts "horizontal, vertical, or diagonal row wins the game.".center(80)
-    puts ""
-    puts "-----------------------------------------------------------------".center(80)
+    border = "-----------------------------------------------------------------".center(80)
+    line1 = "Tic Tac Toe is a paper-and-pencil game for two players, X and O, ".center(80)
+    line2 = "who take turns marking the spaces in a 3×3 grid.".center(80)
+    line3 = "The player who succeeds in placing three of their marks in a ".center(80)
+    line4 = "horizontal, vertical, or diagonal row wins the game.".center(80)
+    "#{border} \n #{line1} \n #{line2} \n #{line3} \n #{line4} \n #{border}"
   end
 
   def initialize
@@ -64,3 +59,5 @@ class Game
     @winner = player
   end
 end
+
+puts Game.info
