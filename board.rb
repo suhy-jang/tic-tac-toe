@@ -1,8 +1,17 @@
+# frozen_string_literal: false
+
+# Board class handles all the board behaviours.
+#   It maintains a state; that is grid positions and pieces on them.
+#   A consumer can view its state, update its state or call its display method.
 class Board
   attr_reader :state
 
   def initialize
     @state = (1..9).to_a
+  end
+
+  def update_state(game_piece, position)
+    @state[position - 1] = game_piece
   end
 
   def display
@@ -16,12 +25,5 @@ class Board
     board << line << wall << row2 << wall
     board << line << wall << row3 << wall << line
     puts board
-  end
-
-  private
-
-  def update_state(game_piece, position)
-    @state[position - 1] = game_piece
-    @state
   end
 end
