@@ -7,57 +7,69 @@
 #   it updates @winner unless draw.
 class Game
   WINNING_PERMUTATIONS =
-    [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6],
-     [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]].freeze
+    [[1,2,3],[4,5,6],[7,8,9],
+    [1,4,7],[2,5,8],[3,6,9],
+    [1,5,9],[3,5,7]].freeze
 
   attr_reader :winner
+  @winner
+  @player
+  @position
 
-  def self.info
-    border = "-----------------------------------------------------------------".center(80)
-    line1 = "Tic Tac Toe is a paper-and-pencil game for two players, X and O, ".center(80)
-    line2 = "who take turns marking the spaces in a 3×3 grid.".center(80)
-    line3 = "The player who succeeds in placing three of their marks in a ".center(80)
-    line4 = "horizontal, vertical, or diagonal row wins the game.".center(80)
-    "#{border} \n #{line1} \n #{line2} \n #{line3} \n #{line4} \n #{border}"
-  end
-
-  def initialize
+  def initialize(player)
+    @player = player
     @winner = nil
+    @b = Board.new
   end
 
-  def move(board_state:, player:, position:)
-    response = update_board(board_state, player, position)
-    update_game_status(response[:board_state], player) if response[:valid]
-    response
+  def move(user, position_num)
+    arr = @b.get_board_numbers
+    unless arr.include?(position_num)
+      return false
+    end
+    @player = user
+    @position = position_num
+    update_board?
+  end
+
+  def game_over?
+    over = false
+    over = true if @b.bFull
+    if is_winner?(@player)
+      set_winner(@player)
+      over = true
+    end
+    return over
   end
 
   private
 
-  def update_board(board_state, player, position)
-    if valid_move?(board_state, position)
-      board_state[position - 1] = player.symbol
-      return { valid: true, board_state: board_state }
+  def update_board?
+    if @b.is_valid_position?(@position)
+      @b.update_state(@player, @position)
+      @b.display
+      return true
     end
-    { valid: false, board_state: board_state }
+    return false
   end
 
-  def update_game_status(board_state, player)
-    game_status = game_over?(board_state, player)
-    update_winner(game_status[:winner]) if game_status[:status]
+  def is_winner?(player)
+    bWin = false
+    for line in WINNING_PERMUTATIONS
+      if line.include?(@position) &&
+            is_fill_same_user?(line,player)
+        bWin = true
+        break
+      end
+    end
+    bWin
   end
 
-  def valid_move?(board_state, position)
-    board_state[position - 1].class == Integer
+  def is_fill_same_user?(idx_arr, user)
+    idx_arr.all? { |i| @b.state[i-1] == user }
   end
 
-  def game_over?(board_state, player)
-    #Check if game_over (winning or draw)
-    #Return { status: true/false, winner: player object / DRAW }
-  end
-
-  def update_winner(player)
+  def set_winner(player)
     @winner = player
   end
 end
-
-puts Game.info
