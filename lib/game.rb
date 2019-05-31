@@ -32,25 +32,22 @@ class Game
     UserInterface::inform_success
   end
 
-  def process_invalid_response(response)
+  def process_invalid_response(response, position)
     show_board
     UserInterface::throw_wrong_place_error if response == 1
     UserInterface::throw_wrong_place_error(position) if response == 2
   end
 
   def play(player)
-    puts "[Info] #{player.name}'s turn"
     loop do
       position = UserInterface::ask_position(player.name, player.stone)
       response = board_valid(position)
-      show_board
-      process_invalid_response(response) unless response.zero?
+      process_invalid_response(response, position) unless response.zero?
       if response.zero?
         process_valid_response(player, position)
         break
       end
     end
-    puts "log: '#{player.name}' turn end"
   end
 
   def decide_first_player
@@ -90,18 +87,16 @@ class Game
   end
 
   def move(player, position)
-    puts "log: stone is #{player.stone}"
     @board.update_state(player.stone, position)
     winner_status_update(player)
   end
 
   def winner_status_update(player)
     player_positions = []
-    @board.each_with_index { |x, idx| player_positions << idx + 1 if x == player.stone }
+    @board.state.each_with_index { |x, idx| player_positions << idx + 1 if x == player.stone }
     WINNING_PERMUTATIONS.each do |winning_case|
       if (player_positions & winning_case).length == 3
         @winner = player
-        puts "log: set winner with #{player.name} (#{player.stone})"
         break
       end
     end
