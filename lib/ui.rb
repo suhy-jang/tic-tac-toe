@@ -14,39 +14,42 @@ module UserInterface
     gets.chomp
   end
 
-  def self.ask_position(str_player)
-    print "#{str_player}, Where to put? ".rjust(50)
-    gets.chomp.to_i
-  end
-
-  def self.ask_who_first(p1,p2)
+  def self.ask_first_player_name(p1_name, p2_name)
     status = 0
     until status > 0
-      print "Who will do first?(name) "
+      print "Who will do first?(name): ".rjust(50)
       name = gets.chomp
-      status = 1 if p1 == name
-      status = 2 if p2 == name
+      status = 1 if p1_name == name
+      status = 2 if p2_name == name
     end
-    (1==status)? p1:p2
+    (1==status)? p1_name : p2_name
+  end
+
+  def self.ask_position(name, stone)
+    print "[ '#{name}' turn! ]\n".rjust(50)
+    print "Where would you like to put your stone (#{stone})?: ".rjust(50)
+    gets.chomp.to_i
   end
 
   def self.inform_occ_position(position)
     puts "#{position} was already occupied".rjust(50)
   end
 
-  def self.inform_result(winner=nil)
-    unless winner.nil?
-      puts "Winner is #{winner}"
+  def self.inform_result(winner_name = nil, winner_stone = nil)
+    puts "Game end".rjust(50)
+    if winner_name.nil?
+      puts "Tie".rjust(50)
     else
-      puts "Tie"
+      puts "[ '#{winner_name} (#{winner_stone})' Won! ]".rjust(50)
     end
   end
 
   def self.throw_wrong_place_error
-    puts "Input between 1~9"
+    puts "Please input between 1~9".rjust(50)
   end
 
   def self.throw_occupied_error
-    puts "It was already occupied position"
+    puts "It is already occupied position".rjust(50)
+    puts "Please select another place".rjust(50)
   end
 end
