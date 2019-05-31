@@ -14,21 +14,21 @@ module UserInterface
     loop do
       print "Player #{num} name: ".rjust(50)
       user_input = gets.chomp
-      type_again if user_input.empty? || user_input.scan(/[a-zA-Z]/).empty?
-      break
+      break unless user_input.empty? || user_input.scan(/[a-zA-Z]/).empty?
+      type_again_name
     end
     user_input.upcase
   end
 
-  def self.type_again
-    puts "Please type in your name!".rjust(50)
+  def self.type_again_name
+    puts "Please type in your name (with alphabet)!".rjust(50)
   end
 
-  def self.ask_first_player_name(p1_name, p2_name, symbol)
-    puts "Who wants to play first?(#{symbol} stone)".rjust(50)
+  def self.ask_first_player_name(p1_name, p2_name, first_sym)
+    puts "Who wants to play first?(#{first_sym} stone)".rjust(50)
     name = nil
     loop do
-      print "Type the name: ".rjust(50)
+      print "Type the name(#{p1_name}, #{p2_name}): ".rjust(50)
       name = gets.chomp.upcase
       break if [p1_name, p2_name].include?(name)
     end
