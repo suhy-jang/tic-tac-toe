@@ -6,52 +6,51 @@
 require "./../lib/ui.rb"
 
 class Board
-  attr_reader :state, :bFull
+  attr_reader :state
 
   BOARD_NUMBERS = (1..9).to_a
-  FULL_NUMBER = 9
 
   def initialize
-    @curr_number = 0
-    @bFull = false
-    @state = (1..9).to_a
+    @occupy_num = 0
+    @state = BOARD_NUMBERS
   end
+
+  self
 
   def update_state(game_piece, position)
     puts "log: game_piece is #{game_piece}"
     puts "log: position is #{position}"
     @state[position - 1] = game_piece
-    increase_curr_number
-    @bFull = curr_num_full?
+    display
+    increase_occupy_num
   end
 
-  def increase_curr_number
-    @curr_number += 1
+  def full?
+    BOARD_NUMBERS.length == @occupy_num
   end
 
-  def curr_num_full?
-    @curr_number == FULL_NUMBER
+  def increase_occupy_num
+    @occupy_num += 1
   end
 
   def is_valid_position?(position)
+    display
     return false if out_of_board?(position)
     return false unless empty_place?(position)
+    puts "log: it is valid board"
     true
   end
 
   def out_of_board?(num)
-    bValid = !(BOARD_NUMBERS.include?(num))
-    puts "log: in board? #{BOARD_NUMBERS}"
-    UserInterface::throw_wrong_place_error unless bValid
-    bValid
+    b_out_place = !(BOARD_NUMBERS.include?(num))
+    UserInterface::throw_wrong_place_error if b_out_place
+    b_out_place
   end
 
   def empty_place?(position)
-    bValid = false
-    bValid = true if @state[position-1].class == Integer
-    puts "log: empty? #{bValid}"
-    UserInterface::throw_occupied_error unless bValid
-    bValid
+    b_empty = @state[position-1].class == Integer ? true : false
+    UserInterface::throw_occupied_error unless b_empty
+    b_empty
   end
 
   def display
