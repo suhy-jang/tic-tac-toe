@@ -52,7 +52,7 @@ module UserInterface
    puts "Please input a correct (not occupied) number 1 and 9".rjust(50)
   end
 
-  def self.inform_success(position)
-    puts "Success to put stone at '#{position}'! ".rjust(50)
+  def self.inform_success(player_stone, position)
+    puts "Successfully placed stone '#{player_stone}' at position '#{position}'".rjust(50)
   end
 end
