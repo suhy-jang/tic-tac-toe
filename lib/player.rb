@@ -1,6 +1,3 @@
-
-require "./../lib/ui.rb"
-
 class Player
   attr_accessor :name, :stone
   def initialize(name, stone)
