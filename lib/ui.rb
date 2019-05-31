@@ -12,55 +12,47 @@ module UserInterface
   def self.ask_name(num)
     user_input = ""
     loop do
-      print "player #{num} name: ".rjust(50)
+      print "Player #{num} name: ".rjust(50)
       user_input = gets.chomp
-      unless "" == user_input
-        break
-      else
-        type_again
-      end
+      type_again if user_input.empty? || user_input.scan(/[a-zA-Z]/).empty?
+      break
     end
-    user_input
+    user_input.upcase
   end
 
   def self.type_again
-    puts "Please type again right value !!".rjust(50)
+    puts "Please type in your name!".rjust(50)
   end
 
   def self.ask_first_player_name(p1_name, p2_name, symbol)
-    status = 0
-    puts "Who will do first?(#{symbol} stone)".rjust(50)
-    until status > 0
+    puts "Who wants to play first?(#{symbol} stone)".rjust(50)
+    name = nil
+    loop do
       print "Type the name: ".rjust(50)
-      name = gets.chomp
-      status = 1 if p1_name == name
-      status = 2 if p2_name == name
-      type_again unless status > 0
+      name = gets.chomp.upcase
+      break if [p1_name, p2_name].include?(name)
     end
-    (1 == status)? p1_name : p2_name
+    name
   end
 
   def self.ask_position(name, stone)
-    print "[ '#{name}' turn! ]\n".rjust(50)
+    print "[ #{name}'s turn! ]\n".rjust(50)
     print "Where would you like to put your stone (#{stone})?: ".rjust(50)
     gets.chomp.to_i
   end
 
   def self.inform_result(winner_name = nil, winner_stone = nil)
-    puts "Game end".rjust(50)
-    if winner_name.nil?
-      puts "Tie".rjust(50)
-    else
-      puts "[ '#{winner_name}' (#{winner_stone}) Won! ]".rjust(50)
-    end
+    puts "Game Over!".rjust(50)
+    return puts "Tie!".rjust(50) if winner_name.nil?
+    puts "[ #{winner_name} (#{winner_stone}) WON! ]".rjust(50)
   end
 
   def self.throw_wrong_place_error(position = nil)
-   puts "#{position} already occupied!".rjust(50) if position
+   return puts "#{position} already occupied!".rjust(50) if position
    puts "Please input a correct (not occupied) number 1 and 9".rjust(50)
   end
 
   def self.inform_success
-    puts "success! ".rjust(50)
+    puts "Success! ".rjust(50)
   end
 end
