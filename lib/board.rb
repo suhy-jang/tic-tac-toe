@@ -1,8 +1,3 @@
-# frozen_string_literal: false
-
-# Board class handles all the board behaviours.
-#   It maintains a state; that is grid positions and pieces on them.
-#   A consumer can view its state, update its state or call its display method.
 require "./../lib/ui.rb"
 
 class Board
@@ -18,13 +13,12 @@ class Board
   end
 
   def update_state(game_piece, position)
-    puts "log: update state #{game_piece}, #{position}"
     @state[position - 1] = game_piece
     increase_occupy_num
   end
 
   def in_range?(position)
-    (1..9).inculde? position
+    (1..9).include? position
   end
 
   def occupied?(position)
