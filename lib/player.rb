@@ -3,8 +3,8 @@ require "./../lib/ui.rb"
 
 class Player
   attr_accessor :name, :stone
-  def initialize(stone)
-    @name = UserInterface::ask_name
+  def initialize(name, stone)
+    @name = name
     @stone = stone
   end
 end
