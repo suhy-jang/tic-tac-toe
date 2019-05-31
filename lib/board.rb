@@ -8,49 +8,28 @@ require "./../lib/ui.rb"
 class Board
   attr_reader :state
 
-  BOARD_NUMBERS = (1..9).to_a
-
   def initialize
     @occupy_num = 0
-    @state = BOARD_NUMBERS
-  end
-
-  self
-
-  def update_state(game_piece, position)
-    puts "log: game_piece is #{game_piece}"
-    puts "log: position is #{position}"
-    @state[position - 1] = game_piece
-    display
-    increase_occupy_num
+    @state = (1..9).to_a
   end
 
   def full?
-    BOARD_NUMBERS.length == @occupy_num
+    @state.length == @occupy_num
   end
 
-  def increase_occupy_num
-    @occupy_num += 1
+  def update_state(game_piece, position)
+    puts "log: update state #{game_piece}, #{position}"
+    @state[position - 1] = game_piece
+    increase_occupy_num
   end
 
-  def is_valid_position?(position)
-    display
-    return false if out_of_board?(position)
-    return false unless empty_place?(position)
-    puts "log: it is valid board"
-    true
+  def number?(position)
+    valid = position > 0
+    valid &= (@state[position-1].class == Integer )? true : false
   end
 
-  def out_of_board?(num)
-    b_out_place = !(BOARD_NUMBERS.include?(num))
-    UserInterface::throw_wrong_place_error if b_out_place
-    b_out_place
-  end
-
-  def empty_place?(position)
-    b_empty = @state[position-1].class == Integer ? true : false
-    UserInterface::throw_occupied_error unless b_empty
-    b_empty
+  def occupied?(position, occupy_sym1, occupy_sym2)
+    @state[position-1] == occupy_sym1 || @state[position-1] == occupy_sym2
   end
 
   def display
@@ -64,5 +43,11 @@ class Board
     board << line << wall << row2 << wall
     board << line << wall << row3 << wall << line
     puts board
+  end
+
+  private
+
+  def increase_occupy_num
+    @occupy_num += 1
   end
 end
