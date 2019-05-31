@@ -2,14 +2,9 @@
 require "./../lib/ui.rb"
 
 class Player
-  attr_accessor :name, :symbol
-  def initialize(symbol)
+  attr_accessor :name, :stone
+  def initialize(stone)
     @name = UserInterface::ask_name
-    @symbol = symbol
-  end
-
-  def move
-    UserInterface::ask_position(@name)
-    gets.to_i
+    @stone = stone
   end
 end
