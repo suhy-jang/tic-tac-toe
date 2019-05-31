@@ -23,13 +23,12 @@ class Board
     increase_occupy_num
   end
 
-  def number?(position)
-    valid = position > 0
-    valid &= (@state[position-1].class == Integer )? true : false
+  def in_range?(position)
+    (1..9).inculde? position
   end
 
-  def occupied?(position, occupy_sym1, occupy_sym2)
-    @state[position-1] == occupy_sym1 || @state[position-1] == occupy_sym2
+  def occupied?(position)
+    @state[position - 1].class != Integer
   end
 
   def display
