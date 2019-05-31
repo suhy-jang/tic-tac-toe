@@ -13,7 +13,6 @@ def main
   board = Board.new
   game = Game.new(player1,player2,board)
   game.game_start
-  game.game_end
 end
 
 main
