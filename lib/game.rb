@@ -29,7 +29,7 @@ class Game
   def process_valid_response(player, position)
     move(player, position)
     show_board
-    UserInterface::inform_success
+    UserInterface::inform_success(position)
   end
 
   def process_invalid_response(response, position)
