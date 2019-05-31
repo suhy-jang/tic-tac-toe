@@ -49,7 +49,8 @@ module UserInterface
 
   def self.throw_wrong_place_error(position = nil)
    return puts "#{position} already occupied!".rjust(50) if position
-   puts "Please input a correct (not occupied) number 1 and 9".rjust(50)
+   puts "Please input a correct number".rjust(50)
+   puts "between 1 and 9 (not occupied)".rjust(50)
   end
 
   def self.inform_success(player_stone, position)
