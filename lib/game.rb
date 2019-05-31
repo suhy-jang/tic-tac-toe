@@ -12,8 +12,6 @@ class Game
     [1,5,9],[3,5,7]
   ].freeze
 
-#  attr_reader :winner
-
   def initialize (player1, player2, board)
     @player1 = player1
     @player2 = player2
@@ -27,9 +25,10 @@ class Game
     show_board
     until @board.full? || is_winner?
       (0 == @turn)? play(@player1) : play(@player2)
-      update_turn
+      change_turn
     end
-    show_result
+    show_board
+    show_winner
   end
 
   private
@@ -38,22 +37,30 @@ class Game
     puts "log: this turn is '#{player.name}' "
     loop do
       position = UserInterface::ask_position(player.name, player.stone)
-      next unless board_valid?(position)
-      move(player, position)
-      break
+      response = board_valid(position)
+      if response > 0
+        show_board
+        UserInterface::throw_wrong_place_error if 1 == response
+        UserInterface::throw_wrong_place_error (position) if 2 == response
+      else
+        move(player, position)
+        show_board
+        UserInterface::inform_success
+        break
+      end
     end
     puts "log: '#{player.name}' turn end"
   end
 
   def decide_first_player
-    name = UserInterface::ask_first_player_name(@player1.name, @player2.name)
+    name = UserInterface::ask_first_player_name(@player1.name, @player2.name, @player1.stone)
     unless compare(name, @player1.name)
-      update_turn
+      change_turn
       swap_stone(@player1, @player2)
     end
   end
 
-  def update_turn
+  def change_turn
     @turn = (@turn + 1) % 2
   end
 
@@ -69,7 +76,7 @@ class Game
     @board.display
   end
 
-  def show_result
+  def show_winner
     if @winner
       UserInterface::inform_result(@winner.name, @winner.stone)
     else
@@ -77,8 +84,15 @@ class Game
     end
   end
 
-  def board_valid?(position)
-    @board.is_valid_position?(position)
+  def board_valid(position)
+    valid_message = 0
+    valid_message += 1 unless @board.number?(position)
+    if valid_message > 0
+      if @board.occupied?(position, @player1.stone, @player2.stone)
+        valid_message += 1
+      end
+    end
+    valid_message
   end
 
   def move(player, position)
@@ -101,7 +115,6 @@ class Game
     bWin
   end
 
-  #it seems able to improve speed
   def is_fill_same_user?(arr, player)
     arr.all? { |i| @board.state[i-1] == player.stone }
   end
