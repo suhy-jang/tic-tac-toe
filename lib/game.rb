@@ -12,67 +12,82 @@ class Game
     [1,5,9],[3,5,7]
   ].freeze
 
-  attr_reader :winner
+#  attr_reader :winner
 
-  def initialize (user1, user2, board)
-    @player1 = user1
-    @player2 = user2
+  def initialize (player1, player2, board)
+    @player1 = player1
+    @player2 = player2
     @board = board
     @winner = nil
     @turn = 0
   end
 
   def game_start
-    name = UserInterface::ask_who_first(@player1.name, @player2.name)
-    @turn = (@player1.name == name)? 0: 1
-    until is_board_full? || is_winner?
+    decide_first_player
+    show_board
+    until @board.full? || is_winner?
       (0 == @turn)? play(@player1) : play(@player2)
-      @turn = (@turn+1)%2
-      puts "log: this turn is #{@turn}"
+      update_turn
     end
+    show_result
   end
+
+  private
 
   def play(player)
+    puts "log: this turn is '#{player.name}' "
     loop do
-      @board.display
-      position = UserInterface::ask_position(player.name)
-      #puts "log: ask again"
+      position = UserInterface::ask_position(player.name, player.stone)
       next unless board_valid?(position)
-      puts "log: before move"
       move(player, position)
-      puts "log: after move"
       break
     end
-    puts "log: player one end"
+    puts "log: '#{player.name}' turn end"
   end
 
-  def game_end
+  def decide_first_player
+    name = UserInterface::ask_first_player_name(@player1.name, @player2.name)
+    unless compare(name, @player1.name)
+      update_turn
+      swap_stone(@player1, @player2)
+    end
+  end
+
+  def update_turn
+    @turn = (@turn + 1) % 2
+  end
+
+  def swap_stone(p1, p2)
+    p1.stone, p2.stone = p2.stone, p1.stone
+  end
+
+  def compare(first, second)
+    first == second
+  end
+
+  def show_board
+    @board.display
+  end
+
+  def show_result
     if @winner
-      UserInterface::inform_result(@winner)
+      UserInterface::inform_result(@winner.name, @winner.stone)
     else
       UserInterface::inform_result
     end
   end
 
-  private
   def board_valid?(position)
-    t = @board.is_valid_position?(position)
-    puts "log: valid? #{t}"
-    t
-  end
-
-  def is_board_full?
-    @board.bFull
+    @board.is_valid_position?(position)
   end
 
   def move(player, position)
-    puts "log: symbol is #{player.symbol}"
-    @board.update_state(player.symbol, position)
-    @board.display
-    winner_update(player, position)
+    puts "log: stone is #{player.stone}"
+    @board.update_state(player.stone, position)
+    winner_status_update(player, position)
   end
 
-  def winner_update(player, position)
+  def winner_status_update(player, position)
     bWin = false
     for line in WINNING_PERMUTATIONS
       if line.include?(position) &&
@@ -82,21 +97,21 @@ class Game
         break
       end
     end
-    puts "log: winner #{bWin}"
+    puts "log: winner status #{bWin}"
     bWin
   end
 
   #it seems able to improve speed
+  def is_fill_same_user?(arr, player)
+    arr.all? { |i| @board.state[i-1] == player.stone }
+  end
+
   def is_winner?
     !@winner.nil?
   end
 
-  def is_fill_same_user?(idx_arr, player)
-    idx_arr.all? { |i| @board.state[i-1] == player.symbol }
-  end
-
   def set_winner(player)
-    @winner = player.name
-    puts "log: set user with #{player.name}"
+    @winner = player
+    puts "log: set winner with #{player.name} (#{player.stone})"
   end
 end
