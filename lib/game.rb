@@ -13,7 +13,7 @@ class Game
     @turn = 0
   end
 
-  def game_start
+  def start
     decide_first_player
     show_board
     until @board.full? || @winner
