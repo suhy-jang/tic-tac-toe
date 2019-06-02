@@ -26,27 +26,16 @@ class Game
 
   private
 
-  def process_valid_response(player, position)
-    move(player, position)
-    show_board
-    UserInterface::inform_success(player.stone, position)
-  end
-
-  def process_invalid_response(response, position)
-    show_board
-    UserInterface::throw_wrong_place_error if response == 1
-    UserInterface::throw_wrong_place_error(position) if response == 2
-  end
-
   def play(player)
     loop do
       position = UserInterface::ask_position(player.name, player.stone)
-      response = board_valid(position)
-      process_invalid_response(response, position) unless response.zero?
-      if response.zero?
-        process_valid_response(player, position)
-        break
-      end
+      error = board_valid(position)
+      move(player, position) if error.zero?
+      show_board
+      UserInterface::inform_success(player.stone, position) if error.zero?
+      UserInterface::throw_wrong_place_error if error == 1
+      UserInterface::throw_wrong_place_error(position) if error == 2
+      break if error.zero?
     end
   end
 
