@@ -42,7 +42,7 @@ class Game
   def decide_first_player
     name = UserInterface::ask_first_player_name(@player1.name, @player2.name, @player1.stone)
 
-    unless compare(name, @player1.name)
+    unless name == @player1.name
       change_turn
       swap_stone(@player1, @player2)
     end
@@ -54,10 +54,6 @@ class Game
 
   def swap_stone(player1, player2)
     player1.stone, player2.stone = player2.stone, player1.stone
-  end
-
-  def compare(first, second)
-    first == second
   end
 
   def show_board
