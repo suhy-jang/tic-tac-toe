@@ -12,7 +12,7 @@ def main
   player2 = Player.new(UserInterface::ask_name(2), STONE_2)
   board = Board.new
   game = Game.new(player1,player2,board)
-  game.game_start
+  game.start
 end
 
 main
