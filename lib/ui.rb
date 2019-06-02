@@ -25,10 +25,10 @@ module UserInterface
   end
 
   def self.ask_first_player_name(p1_name, p2_name, first_sym)
-    puts "Who wants to play first?(#{first_sym} stone)".rjust(50)
+    puts "Who wants to play with '#{first_sym}' (first player)".rjust(50)
     name = nil
     loop do
-      print "Type the name(#{p1_name}, #{p2_name}): ".rjust(50)
+      print "Type the name(#{p1_name} or #{p2_name}): ".rjust(50)
       name = gets.chomp.upcase
       break if [p1_name, p2_name].include?(name)
     end
@@ -37,23 +37,23 @@ module UserInterface
 
   def self.ask_position(name, stone)
     print "[ #{name}'s turn! ]\n".rjust(50)
-    print "Where would you like to put your stone (#{stone})?: ".rjust(50)
+    print "Where would you like to put your piece '#{stone}'?: ".rjust(50)
     gets.chomp.to_i
   end
 
   def self.inform_result(winner_name = nil, winner_stone = nil)
     puts "Game Over!".rjust(50)
-    return puts "Tie!".rjust(50) if winner_name.nil?
+    return puts "[ TIE! ]".rjust(50) if winner_name.nil?
     puts "[ #{winner_name} (#{winner_stone}) WON! ]".rjust(50)
   end
 
   def self.throw_wrong_place_error(position = nil)
-   return puts "#{position} already occupied!".rjust(50) if position
+   return puts "'#{position}' already occupied!".rjust(50) if position
    puts "Please input a correct number".rjust(50)
    puts "between 1 and 9 (not occupied)".rjust(50)
   end
 
   def self.inform_success(player_stone, position)
-    puts "Successfully placed stone '#{player_stone}' at position '#{position}'".rjust(50)
+    puts "Successfully placed '#{player_stone}' at position '#{position}'".rjust(50)
   end
 end
