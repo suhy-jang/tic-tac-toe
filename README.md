@@ -1,14 +1,14 @@
 # Tic Tac Toe game implementation
 
-This collaborative project to test our understanding of the [Object Oriented Programming](https://en.wikipedia.org/wiki/Object-oriented_programming).
+This is a collaborative project to test our understanding of the [Object Oriented Programming](https://en.wikipedia.org/wiki/Object-oriented_programming).
 
 The project is part of a series of projects to be completed by students of [Microverse](https://www.microverse.org/ "The Global School for Remote Software Developers!").
 
 ## Game Rule
 
-Tic Tac Toe is a paper-and-pencil game for two players, X and O,
+Tic Tac Toe is a paper-and-pencil game for two players, using X and O marks.
 
-who take turns marking the spaces in a 3×3 grid.
+Players take turns marking the spaces in a 3×3 grid.
 
 The player who succeeds in placing three of their marks in a
 
