@@ -57,7 +57,7 @@ class Game
   end
 
   def show_board
-    @board.display
+    UserInterface::display_board(@board.state)
   end
 
   def show_winner
